@@ -1,0 +1,79 @@
+{
+  "name": "mernspace-catelog-service",
+  "version": "1.0.0",
+  "description": "the catalog service for hobby project fully loaded with best practices and followes industries standards and clean code",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon",
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "format:check": "npx prettier . --check",
+    "format:fix": "npx prettier . --write",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "test": "jest --runInBand --detectOpenHandles",
+    "test:coverage": "jest --no-cache --coverage --all --runInBand --detectOpenHandles",
+    "test:watch": "jest --watch",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/yash-bansod-2003/templete-node-express-ts-jest.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "typescript",
+    "jest"
+  ],
+  "author": "yash gajanan bansod",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yash-bansod-2003/templete-node-express-ts-jest/issues"
+  },
+  "homepage": "https://github.com/yash-bansod-2003/templete-node-express-ts-jest#readme",
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@swc/core": "^1.4.8",
+    "@types/babel__core": "^7.20.5",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/http-errors": "^2.0.4",
+    "@types/jest": "^29.5.12",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^20.11.28",
+    "@types/supertest": "^6.0.2",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.0.11",
+    "jest": "^29.7.0",
+    "lint-staged": "^15.2.2",
+    "mock-jwks": "^1.0.10",
+    "nodemon": "^3.1.0",
+    "prettier": "3.2.5",
+    "supertest": "^6.3.4",
+    "ts-jest": "^29.1.2",
+    "ts-node": "10.9.2",
+    "tsup": "^8.0.2",
+    "typescript": "5.4.2"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "express": "^4.18.3",
+    "express-jwt": "^8.4.1",
+    "express-validator": "^7.0.1",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.1.0",
+    "morgan": "^1.10.0",
+    "winston": "^3.12.0"
+  }
+}
