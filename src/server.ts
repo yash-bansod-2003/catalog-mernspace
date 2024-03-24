@@ -2,6 +2,7 @@ import express, { type Express, urlencoded, json } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { errorHandler } from "./common/middlewares/error-handler";
 
 export const createServer = (): Express => {
   const app = express();
@@ -18,7 +19,8 @@ export const createServer = (): Express => {
     })
     .get("/message/:name", (req, res) => {
       return res.json({ message: `hello ${req.params.name}` });
-    });
+    })
+    .use(errorHandler);
 
   return app;
 };
