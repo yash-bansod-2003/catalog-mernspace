@@ -1,8 +1,9 @@
 import { createServer } from "./server";
 import { logger } from "./configs/logger";
+import config from "config";
 
-const host = "localhost";
-const port = 3001;
+const host = String(config.get("server.host")) || "localhost";
+const port = Number(config.get("server.port")) || 3001;
 
 const server = createServer();
 

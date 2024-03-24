@@ -7,21 +7,21 @@ const logger = createLogger({
     new transports.Console({
       level: "info",
       format: format.combine(format.timestamp(), format.simple()),
-      silent: process.env.NODE_ENV === "test"
+      silent: process.env.NODE_ENV === "test",
     }),
     new transports.File({
       dirname: "logs",
       filename: "combined.log",
       level: "info",
       format: format.combine(format.timestamp(), format.simple()),
-      silent: process.env.NODE_ENV === "test"
+      silent: process.env.NODE_ENV === "test",
     }),
     new transports.File({
       dirname: "logs",
       filename: "errors.log",
       level: "error",
       format: format.combine(format.timestamp(), format.simple()),
-      silent: process.env.NODE_ENV === "test"
+      silent: process.env.NODE_ENV === "test",
     }),
   ],
 });
