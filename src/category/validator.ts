@@ -12,13 +12,14 @@ const categoryValidator = [
     body("priceConfiguration.*.priceType")
         .exists()
         .withMessage("price type in price configuration is required field")
-        .custom((value: "base" | "additional") => {
+        .custom((value: string) => {
             const validKeys = ["base", "additional"];
             if (!validKeys.includes(value)) {
                 throw new Error(
-                    `value ${value}, is not a supported as a price type in price configuration , supported types are ${validKeys.toString()}`,
+                    `Value ${value} is not a supported price type in price configuration. Supported types are: ${validKeys.join(", ")}`,
                 );
             }
+            return value;
         }),
     body("attributes").exists().withMessage("attributes is required field"),
 ];

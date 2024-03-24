@@ -1,24 +1,5 @@
 import { Schema, Document, model } from "mongoose";
-
-interface PriceConfiguration {
-    [key: string]: {
-        priceType: string;
-        availableOptions: string[];
-    };
-}
-
-interface Attribute {
-    name: string;
-    widgetType: string;
-    defaultValue: string;
-    availableOptions: string[];
-}
-
-interface Category {
-    name: string;
-    priceConfiguration: PriceConfiguration;
-    attributes: Attribute[];
-}
+import { Attribute, Category, PriceConfiguration } from "./category";
 
 type CategoryDocument = Category & Document;
 type PriceConfigurationDocument = PriceConfiguration & Document;
