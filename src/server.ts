@@ -3,6 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./common/middlewares/error-handler";
+import { categoryRouter } from "./category/router";
 
 export const createServer = (): Express => {
     const app = express();
@@ -19,6 +20,7 @@ export const createServer = (): Express => {
         .get("/message/:name", (req, res) => {
             return res.json({ message: `hello ${req.params.name}` });
         })
+        .use("/api/category", categoryRouter)
         .use(errorHandler);
 
     return app;

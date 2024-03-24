@@ -1,7 +1,7 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 
 module.exports = {
-    displayName: "Mernspace Auth Service",
+    displayName: "Mernspace Catalog Service",
     roots: ["<rootDir>"],
     transform: {
         "^.+\\.tsx?$": "ts-jest",
