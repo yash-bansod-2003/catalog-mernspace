@@ -10,11 +10,11 @@ const port = Number(config.get("server.port")) || 3001;
 const server = createServer();
 
 server.listen(port, host, async () => {
-  try {
-    await connectToDatabase(config.get("database.url"));
-    logger.info(`Server Listening on port ${port}`);
-  } catch (error) {
-    logger.error(error);
-    process.exit(1);
-  }
+    try {
+        await connectToDatabase(config.get("database.url"));
+        logger.info(`Server Listening on port ${port}`);
+    } catch (error) {
+        logger.error(error);
+        process.exit(1);
+    }
 });
