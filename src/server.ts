@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./common/middlewares/error-handler";
 import { categoryRouter } from "./category/router";
+import { productRouter } from "./product/router";
 
 export const createServer = (): Express => {
     const app = express();
@@ -21,6 +22,7 @@ export const createServer = (): Express => {
             return res.json({ message: `hello ${req.params.name}` });
         })
         .use("/api/category", categoryRouter)
+        .use("/api/product", productRouter)
         .use(errorHandler);
 
     return app;
