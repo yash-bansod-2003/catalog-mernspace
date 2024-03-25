@@ -22,4 +22,29 @@ router.post(
     asyncWrapper(categoryController.create.bind(categoryController)),
 );
 
+router.get(
+    "/",
+    asyncWrapper(categoryController.getAll.bind(categoryController)),
+);
+
+router.get(
+    "/:id",
+    asyncWrapper(categoryController.getById.bind(categoryController)),
+);
+
+router.put(
+    "/:id",
+    authenticate,
+    canAccess([UserRoles.ADMIN]),
+    categoryValidator,
+    asyncWrapper(categoryController.update.bind(categoryController)),
+);
+
+router.delete(
+    "/:id",
+    authenticate,
+    canAccess([UserRoles.ADMIN]),
+    asyncWrapper(categoryController.delete.bind(categoryController)),
+);
+
 export { router as categoryRouter };
