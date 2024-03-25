@@ -3,3 +3,5 @@ server:
     port: 5002
 database:
     url: mongodb://localhost:27017/catalog
+auth:
+    jwksUri: http://localhost:5001/.well-known/jwks.json
