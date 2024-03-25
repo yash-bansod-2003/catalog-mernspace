@@ -1,5 +1,5 @@
 import { Schema, Document, model } from "mongoose";
-import { Attribute, Category, PriceConfiguration } from "./category";
+import { Attribute, Category, PriceConfiguration } from "./types";
 
 type CategoryDocument = Category & Document;
 type PriceConfigurationDocument = PriceConfiguration & Document;
@@ -65,4 +65,4 @@ const CategoryModel = model<CategoryDocument>(
     "categories",
 );
 
-export { CategoryModel, Category };
+export { CategoryModel };

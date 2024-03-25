@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { CategoryService } from "./service";
 import { validationResult } from "express-validator";
-import { Category } from "./category";
+import { Category } from "./types";
 import { Logger } from "winston";
 import createHttpError from "http-errors";
 

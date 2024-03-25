@@ -1,5 +1,5 @@
 import createHttpError from "http-errors";
-import { Category } from "./category";
+import { Category } from "./types";
 import { CategoryModel } from "./model";
 
 class CategoryService {
