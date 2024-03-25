@@ -22,7 +22,31 @@ class ProductController {
             return res.status(422).json({ errors: errors.array() });
         }
 
-        const productData = req.body as Product;
+        const {
+            name,
+            description,
+            priceConfiguration,
+            attributes,
+            categoryId,
+            image,
+            isPublish,
+            tenantId,
+        } = req.body as Product;
+
+        const productData = {
+            name,
+            description,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            priceConfiguration: JSON.parse(
+                priceConfiguration as unknown as string,
+            ),
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            attributes: JSON.parse(attributes as unknown as string),
+            tenantId,
+            categoryId,
+            isPublish,
+            image,
+        };
 
         this.logger.debug("Creating a new product", { productData });
 

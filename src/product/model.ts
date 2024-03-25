@@ -5,13 +5,14 @@ type ProductDocument = Product & Document;
 type PriceConfigurationDocument = PriceConfiguration & Document;
 type AttributeDocument = Attribute & Document;
 
-const attributesSchema = new Schema<AttributeDocument>({
+const attributeSubSchema = new Schema<AttributeDocument>({
     name: {
         type: String,
         required: true,
     },
     value: {
         type: Schema.Types.Mixed,
+        required: true,
     },
 });
 
@@ -25,6 +26,7 @@ const priceConfigurationSubSchema = new Schema<PriceConfigurationDocument>(
         availableOptions: {
             type: Map,
             of: Number,
+            required: true,
         },
     },
     { timestamps: true },
@@ -47,9 +49,11 @@ const productSchema = new Schema<ProductDocument>(
         priceConfiguration: {
             type: Map,
             of: priceConfigurationSubSchema,
+            required: true,
         },
         attributes: {
-            type: [attributesSchema],
+            type: [attributeSubSchema],
+            required: true,
         },
         tenantId: {
             type: String,
@@ -62,8 +66,8 @@ const productSchema = new Schema<ProductDocument>(
         },
         isPublish: {
             type: Boolean,
-            required: false,
-            default: false,
+            required: true,
+            default: true,
         },
     },
     { timestamps: true },

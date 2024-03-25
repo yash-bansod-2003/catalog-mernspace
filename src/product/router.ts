@@ -8,6 +8,7 @@ import { asyncWrapper } from "../common/lib/async-wrapper";
 import authenticate from "../common/middlewares/authenticate";
 import { canAccess } from "../common/middlewares/can-access";
 import { UserRoles } from "../common/constants";
+import fileUpload from "express-fileupload";
 
 const router = express.Router();
 
@@ -18,6 +19,7 @@ router.post(
     "/",
     authenticate,
     canAccess([UserRoles.ADMIN, UserRoles.MANAGER]),
+    fileUpload(),
     productCreateValidator,
     asyncWrapper(productController.create.bind(productController)),
 );

@@ -2,8 +2,8 @@ import { Schema, Document, model } from "mongoose";
 import { Attribute, Category, PriceConfiguration } from "./types";
 
 type CategoryDocument = Category & Document;
-type PriceConfigurationDocument = PriceConfiguration & Document;
 type AttributeDocument = Attribute & Document;
+type PriceConfigurationDocument = PriceConfiguration & Document;
 
 const priceConfigurationSubSchema = new Schema<PriceConfigurationDocument>(
     {
@@ -31,7 +31,7 @@ const attributeSubSchema = new Schema<AttributeDocument>({
         required: true,
     },
     defaultValue: {
-        type: Schema.Types.Mixed,
+        type: String,
         required: true,
     },
     availableOptions: {

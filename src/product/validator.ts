@@ -11,10 +11,10 @@ const productCreateValidator = [
         .withMessage("Description is required.")
         .isString()
         .withMessage("Description must be a string."),
-    body("image").custom((value, { req }) => {
-        if (!req.file) throw new Error("Product image file is required.");
-        return true;
-    }),
+    // body("image").custom((value, { req }) => {
+    //     if (!req.file) throw new Error("Product image file is required.");
+    //     return true;
+    // }),
     body("priceConfiguration")
         .exists()
         .withMessage("Price Configuration is required."),
