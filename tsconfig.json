@@ -8,11 +8,6 @@
         "emitDecoratorMetadata": true,
         "module": "CommonJS",
         "moduleResolution": "Node",
-        "baseUrl": ".",
-        "paths": {
-            "@/*": ["./src/*"],
-            "@e2e/*": ["./e2e/*"]
-        },
         "declaration": false,
         "sourceMap": true,
         "outDir": "./dist/src",

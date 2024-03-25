@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { CategoryService } from "./service";
 import { validationResult } from "express-validator";
 import { Category } from "./category";
@@ -13,7 +13,7 @@ class CategoryController {
         this.logger = logger;
     }
 
-    async create(req: Request, res: Response, next: NextFunction) {
+    async create(req: Request, res: Response) {
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
@@ -28,21 +28,17 @@ class CategoryController {
             attributes,
         });
 
-        try {
-            this.logger.info("creating new category..!");
+        this.logger.info("creating new category..!");
 
-            const category = await this.categoryService.create({
-                name,
-                priceConfiguration,
-                attributes,
-            });
+        const category = await this.categoryService.create({
+            name,
+            priceConfiguration,
+            attributes,
+        });
 
-            this.logger.info("new category has been created");
+        this.logger.info("new category has been created");
 
-            return res.status(201).json(category);
-        } catch (error) {
-            return next(error);
-        }
+        return res.status(201).json(category);
     }
 }
 
