@@ -9,17 +9,31 @@ import authenticate from "../common/middlewares/authenticate";
 import { canAccess } from "../common/middlewares/can-access";
 import { UserRoles } from "../common/constants";
 import fileUpload from "express-fileupload";
+import { S3Storage } from "../common/services/s3-storage";
+import createHttpError from "http-errors";
 
 const router = express.Router();
 
 const productService = new ProductService(ProductModel);
-const productController = new ProductController(productService, logger);
+const s3Storage = new S3Storage();
+const productController = new ProductController(
+    productService,
+    s3Storage,
+    logger,
+);
 
 router.post(
     "/",
     authenticate,
     canAccess([UserRoles.ADMIN, UserRoles.MANAGER]),
-    fileUpload(),
+    fileUpload({
+        limits: { fileSize: 500 * 1024 }, //500kb
+        abortOnLimit: true,
+        limitHandler: (req, res, next) => {
+            const error = createHttpError(400, "File size exceed the limit");
+            next(error);
+        },
+    }),
     productCreateValidator,
     asyncWrapper(productController.create.bind(productController)),
 );

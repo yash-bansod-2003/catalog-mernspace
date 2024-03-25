@@ -1,16 +1,21 @@
-import { Request, Response } from "express";
+import { Response } from "express";
+import { Request } from "express-jwt";
 import { validationResult } from "express-validator";
 import { ProductService } from "./service";
 import { Product } from "./types";
 import { Logger } from "winston";
+import { FileStorage } from "../common/types/storage";
+import { v4 as uuidv4 } from "uuid";
+import { UploadedFile } from "express-fileupload";
 
 class ProductController {
     constructor(
         private productService: ProductService,
+        private storage: FileStorage,
         private logger: Logger,
     ) {
         this.productService = productService;
-        this.logger = logger;
+        (this.storage = storage), (this.logger = logger);
     }
 
     async create(req: Request, res: Response) {
@@ -22,13 +27,21 @@ class ProductController {
             return res.status(422).json({ errors: errors.array() });
         }
 
+        const imageFile = req.files!.image as UploadedFile;
+
+        const imageName = uuidv4();
+
+        await this.storage.upload({
+            filename: imageName,
+            fileData: imageFile.data.buffer,
+        });
+
         const {
             name,
             description,
             priceConfiguration,
             attributes,
             categoryId,
-            image,
             isPublish,
             tenantId,
         } = req.body as Product;
@@ -45,7 +58,7 @@ class ProductController {
             tenantId,
             categoryId,
             isPublish,
-            image,
+            image: imageName,
         };
 
         this.logger.debug("Creating a new product", { productData });
