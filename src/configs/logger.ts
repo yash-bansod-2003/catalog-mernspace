@@ -2,7 +2,7 @@ import { createLogger, transports, format } from "winston";
 
 const logger = createLogger({
     level: "info",
-    defaultMeta: { serviceName: "templete" },
+    defaultMeta: { serviceName: "mernspace-catalog" },
     transports: [
         new transports.Console({
             level: "info",

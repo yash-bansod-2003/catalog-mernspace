@@ -17,11 +17,18 @@ class ProductService {
     }
 
     async updateProduct(id: string, updates: Partial<Product>) {
-        return this.productModel.findByIdAndUpdate(id, updates, { new: true });
+        return this.productModel.findByIdAndUpdate(id, updates, {
+            new: true,
+        });
     }
 
     async deleteProduct(id: string) {
         return this.productModel.findByIdAndDelete(id);
+    }
+
+    async getProductImage(id: string): Promise<string | undefined> {
+        const product = await this.productModel.findById(id);
+        return product?.image;
     }
 }
 

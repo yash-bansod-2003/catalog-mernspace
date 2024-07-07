@@ -1,7 +1,7 @@
 import express from "express";
 import { ProductController } from "./controller";
 import { ProductService } from "./service";
-import { productCreateValidator } from "./validator";
+import { productCreateValidator, productUpdateValidator } from "./validator";
 import { logger } from "../configs/logger";
 import { ProductModel } from "./model";
 import { asyncWrapper } from "../common/lib/async-wrapper";
@@ -49,7 +49,15 @@ router.put(
     "/:id",
     authenticate,
     canAccess([UserRoles.ADMIN, UserRoles.MANAGER]),
-    productCreateValidator,
+    fileUpload({
+        limits: { fileSize: 500 * 1024 }, //500kb
+        abortOnLimit: true,
+        limitHandler: (req, res, next) => {
+            const error = createHttpError(400, "File size exceed the limit");
+            next(error);
+        },
+    }),
+    productUpdateValidator,
     asyncWrapper(productController.update.bind(productController)),
 );
 

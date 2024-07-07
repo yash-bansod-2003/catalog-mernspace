@@ -7,6 +7,8 @@ import { Logger } from "winston";
 import { FileStorage } from "../common/types/storage";
 import { v4 as uuidv4 } from "uuid";
 import { UploadedFile } from "express-fileupload";
+import { BodyDataTypes } from "@aws-sdk/lib-storage";
+import createHttpError from "http-errors";
 
 class ProductController {
     constructor(
@@ -15,7 +17,8 @@ class ProductController {
         private logger: Logger,
     ) {
         this.productService = productService;
-        (this.storage = storage), (this.logger = logger);
+        this.storage = storage;
+        this.logger = logger;
     }
 
     async create(req: Request, res: Response) {
@@ -33,7 +36,7 @@ class ProductController {
 
         await this.storage.upload({
             filename: imageName,
-            fileData: imageFile.data.buffer,
+            fileData: imageFile.data.buffer as BodyDataTypes,
         });
 
         const {
@@ -85,15 +88,53 @@ class ProductController {
     }
 
     async update(req: Request, res: Response) {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            this.logger.warn("Validation failed while creating product", {
+                errors: errors.array(),
+            });
+            return res.status(422).json({ errors: errors.array() });
+        }
+
         const { id } = req.params;
-        const updates = req.body as Product;
 
-        this.logger.debug("Updating product", { productId: id, updates });
+        const imageFile = req.files?.image as UploadedFile;
+        let imageName: string | undefined;
+        let oldImage: string | undefined;
 
-        const product = await this.productService.updateProduct(id, updates);
+        if (imageFile) {
+            oldImage = await this.productService.getProductImage(id);
 
-        this.logger.info("Product updated", { product });
-        return res.status(200).json(product);
+            imageName = uuidv4();
+
+            await this.storage.upload({
+                filename: imageName,
+                fileData: imageFile.data.buffer as BodyDataTypes,
+            });
+
+            if (oldImage) {
+                await this.storage.delete(oldImage);
+            }
+        }
+        const productData = req.body as Product;
+
+        this.logger.debug("Updating product", {
+            productId: id,
+            productData,
+        });
+
+        const updatedProduct = await this.productService.updateProduct(id, {
+            ...productData,
+            image: imageName ?? oldImage,
+        });
+
+        if (!updatedProduct) {
+            const error = createHttpError(404, "Product not found");
+            throw error;
+        }
+
+        return res.status(200).json({ id });
     }
 
     async delete(req: Request, res: Response) {

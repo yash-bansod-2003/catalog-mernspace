@@ -2,6 +2,12 @@ server:
     host: "localhost"
     port: 5002
 database:
-    url: mongodb://localhost:27017/catalog
+    url: mongodb://127.0.0.1:27017/catalog
 auth:
     jwksUri: http://localhost:5001/.well-known/jwks.json
+aws:
+    s3:
+        region:
+        bucket:
+        key:
+        secret:

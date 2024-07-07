@@ -14,7 +14,8 @@ server.listen(port, host, async () => {
         await connectToDatabase(config.get("database.url"));
         logger.info(`Server Listening on port ${port}`);
     } catch (error) {
-        logger.error(error);
+        logger.error(String(error));
+
         process.exit(1);
     }
 });
