@@ -7,7 +7,7 @@ import config from "config";
 import mongoose from "mongoose";
 import { UserRoles } from "../../common/constants";
 
-describe("category delete", () => {
+describe("category update", () => {
     let jwks: ReturnType<typeof createJWKSMock>;
 
     beforeAll(async () => {
@@ -33,9 +33,31 @@ describe("category delete", () => {
         }
     });
 
-    describe("delete /api/category", () => {
+    describe("put /api/category/:id", () => {
         const categoryData = {
             name: "Pizza",
+            priceConfiguration: {
+                size: {
+                    priceType: "base",
+                    availableOptions: ["small", "large", "medium"],
+                },
+                crust: {
+                    priceType: "additional",
+                    availableOptions: ["thin", "thick"],
+                },
+            },
+            attributes: [
+                {
+                    name: "isHit",
+                    widgetType: "switch",
+                    defaultValue: "no",
+                    availableOptions: ["yes", "no"],
+                },
+            ],
+        };
+
+        const updatedCategoryData = {
+            name: "new Pizza",
             priceConfiguration: {
                 size: {
                     priceType: "base",
@@ -62,12 +84,16 @@ describe("category delete", () => {
             const category = await CategoryModel.create(categoryData);
 
             await supertest(createServer())
-                .delete(`/api/category/${category._id}`)
+                .put(`/api/category/${category._id}`)
                 .set("Cookie", [`accessToken=${accessToken}`])
                 .expect(200)
+                .send(updatedCategoryData)
                 .then((res) => {
                     expect(res.ok).toBe(true);
                 });
+
+            const categories = await CategoryModel.find();
+            expect(categories[0].name).toBe(updatedCategoryData.name);
         });
 
         it("should return status 403 (Forbidden) if user is not admin", async () => {
@@ -79,23 +105,25 @@ describe("category delete", () => {
             const category = await CategoryModel.create(categoryData);
 
             await supertest(createServer())
-                .delete(`/api/category/${category._id}`)
+                .put(`/api/category/${category._id}`)
                 .set("Cookie", [`accessToken=${accessToken}`])
+                .send(updatedCategoryData)
                 .expect(403);
 
             const categories = await CategoryModel.find();
-            expect(categories).toHaveLength(1);
+            expect(categories[0].name).toBe(category.name);
         });
 
         it("should return status 401 if token does not exist", async () => {
             const category = await CategoryModel.create(categoryData);
 
             await supertest(createServer())
-                .delete(`/api/category/${category._id}`)
+                .put(`/api/category/${category._id}`)
+                .send(updatedCategoryData)
                 .expect(401);
 
             const categories = await CategoryModel.find();
-            expect(categories).toHaveLength(1);
+            expect(categories[0].name).toBe(category.name);
         });
     });
 });

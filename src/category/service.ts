@@ -39,9 +39,11 @@ class CategoryService {
 
     async update(id: string, updates: Partial<Category>) {
         try {
-            const category = await this.categoryModel.findByIdAndUpdate(
-                id,
-                updates,
+            const category = await this.categoryModel.findOneAndUpdate(
+                { _id: id },
+                {
+                    $set: updates,
+                },
                 { new: true },
             );
             return category;
