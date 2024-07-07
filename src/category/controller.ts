@@ -83,8 +83,10 @@ class CategoryController {
         this.logger.debug("Deleting category", { categoryId: id });
 
         await this.categoryService.delete(id);
+
         this.logger.info("Category deleted", { categoryId: id });
-        return res.status(204).send();
+
+        return res.status(200).send({ id });
     }
 }
 
