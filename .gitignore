@@ -82,6 +82,7 @@ web_modules/
 # config yaml variable files
 dev.yaml
 development.yaml
+production.yaml
 prod.yaml
 production.yaml
 test.yaml
