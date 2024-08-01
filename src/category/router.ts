@@ -7,7 +7,7 @@ import { CategoryModel } from "./model";
 import { asyncWrapper } from "../common/lib/async-wrapper";
 import authenticate from "../common/middlewares/authenticate";
 import { canAccess } from "../common/middlewares/can-access";
-import { UserRoles } from "../common/constants";
+import { Roles } from "../common/lib/constants";
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ const categoryController = new CategoryController(categoryService, logger);
 router.post(
     "/",
     authenticate,
-    canAccess([UserRoles.ADMIN]),
+    canAccess([Roles.ADMIN]),
     categoryValidator,
     asyncWrapper(categoryController.create.bind(categoryController)),
 );
@@ -35,7 +35,7 @@ router.get(
 router.put(
     "/:id",
     authenticate,
-    canAccess([UserRoles.ADMIN]),
+    canAccess([Roles.ADMIN]),
     categoryValidator,
     asyncWrapper(categoryController.update.bind(categoryController)),
 );
@@ -43,7 +43,7 @@ router.put(
 router.delete(
     "/:id",
     authenticate,
-    canAccess([UserRoles.ADMIN]),
+    canAccess([Roles.ADMIN]),
     asyncWrapper(categoryController.delete.bind(categoryController)),
 );
 

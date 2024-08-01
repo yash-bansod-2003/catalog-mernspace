@@ -7,7 +7,7 @@ import { ProductModel } from "./model";
 import { asyncWrapper } from "../common/lib/async-wrapper";
 import authenticate from "../common/middlewares/authenticate";
 import { canAccess } from "../common/middlewares/can-access";
-import { UserRoles } from "../common/constants";
+import { Roles } from "../common/lib/constants";
 import fileUpload from "express-fileupload";
 import { S3Storage } from "../common/services/s3-storage";
 import createHttpError from "http-errors";
@@ -25,7 +25,7 @@ const productController = new ProductController(
 router.post(
     "/",
     authenticate,
-    canAccess([UserRoles.ADMIN, UserRoles.MANAGER]),
+    canAccess([Roles.ADMIN, Roles.MANAGER]),
     fileUpload({
         limits: { fileSize: 500 * 1024 }, //500kb
         abortOnLimit: true,
@@ -48,7 +48,7 @@ router.get(
 router.put(
     "/:id",
     authenticate,
-    canAccess([UserRoles.ADMIN, UserRoles.MANAGER]),
+    canAccess([Roles.ADMIN, Roles.MANAGER]),
     fileUpload({
         limits: { fileSize: 500 * 1024 }, //500kb
         abortOnLimit: true,
@@ -64,7 +64,7 @@ router.put(
 router.delete(
     "/:id",
     authenticate,
-    canAccess([UserRoles.ADMIN, UserRoles.MANAGER]),
+    canAccess([Roles.ADMIN, Roles.MANAGER]),
     asyncWrapper(productController.delete.bind(productController)),
 );
 

@@ -5,7 +5,7 @@ import { CategoryModel } from "../model";
 import { connectToDatabase } from "../../configs/db";
 import config from "config";
 import mongoose from "mongoose";
-import { UserRoles } from "../../common/constants";
+import { Roles } from "../../common/lib/constants";
 
 describe("category delete", () => {
     let jwks: ReturnType<typeof createJWKSMock>;
@@ -33,7 +33,7 @@ describe("category delete", () => {
         }
     });
 
-    describe("delete /api/category", () => {
+    describe("delete /api/v1/category", () => {
         const categoryData = {
             name: "Pizza",
             priceConfiguration: {
@@ -57,12 +57,12 @@ describe("category delete", () => {
         };
 
         it("should returns status 200", async () => {
-            const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
+            const accessToken = jwks.token({ sub: "1", role: Roles.ADMIN });
 
             const category = await CategoryModel.create(categoryData);
 
             await supertest(createServer())
-                .delete(`/api/category/${category._id}`)
+                .delete(`/api/v1/category/${category._id}`)
                 .set("Cookie", [`accessToken=${accessToken}`])
                 .expect(200)
                 .then((res) => {
@@ -73,13 +73,13 @@ describe("category delete", () => {
         it("should return status 403 (Forbidden) if user is not admin", async () => {
             const accessToken = jwks.token({
                 sub: "1",
-                role: UserRoles.CUSTOMER,
+                role: Roles.CUSTOMER,
             });
 
             const category = await CategoryModel.create(categoryData);
 
             await supertest(createServer())
-                .delete(`/api/category/${category._id}`)
+                .delete(`/api/v1/category/${category._id}`)
                 .set("Cookie", [`accessToken=${accessToken}`])
                 .expect(403);
 
@@ -91,7 +91,7 @@ describe("category delete", () => {
             const category = await CategoryModel.create(categoryData);
 
             await supertest(createServer())
-                .delete(`/api/category/${category._id}`)
+                .delete(`/api/v1/category/${category._id}`)
                 .expect(401);
 
             const categories = await CategoryModel.find();

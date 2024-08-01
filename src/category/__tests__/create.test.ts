@@ -5,7 +5,7 @@ import { CategoryModel } from "../model";
 import { connectToDatabase } from "../../configs/db";
 import config from "config";
 import mongoose from "mongoose";
-import { UserRoles } from "../../common/constants";
+import { Roles } from "../../common/lib/constants";
 
 describe("category create", () => {
     let jwks: ReturnType<typeof createJWKSMock>;
@@ -33,7 +33,7 @@ describe("category create", () => {
         }
     });
 
-    describe("post /api/category", () => {
+    describe("post /api/v1/category", () => {
         const categoryData = {
             name: "Pizza",
             priceConfiguration: {
@@ -57,10 +57,10 @@ describe("category create", () => {
         };
 
         it("should returns status 201", async () => {
-            const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
+            const accessToken = jwks.token({ sub: "1", role: Roles.ADMIN });
 
             await supertest(createServer())
-                .post("/api/category")
+                .post("/api/v1/category")
                 .set("Cookie", [`accessToken=${accessToken}`])
                 .send(categoryData)
                 .expect(201)
@@ -69,10 +69,10 @@ describe("category create", () => {
                 });
         });
         it("should return 422 if category data is invalid", async () => {
-            const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
+            const accessToken = jwks.token({ sub: "1", role: Roles.ADMIN });
 
             await supertest(createServer())
-                .post("/api/category")
+                .post("/api/v1/category")
                 .set("Cookie", [`accessToken=${accessToken}`])
                 .send({})
                 .expect(422);
@@ -81,11 +81,11 @@ describe("category create", () => {
         it("should return status 403 (Forbidden) if user is not admin", async () => {
             const accessToken = jwks.token({
                 sub: "1",
-                role: UserRoles.CUSTOMER,
+                role: Roles.CUSTOMER,
             });
 
             await supertest(createServer())
-                .post("/api/category")
+                .post("/api/v1/category")
                 .set("Cookie", [`accessToken=${accessToken}`])
                 .send(categoryData)
                 .expect(403);
@@ -96,7 +96,7 @@ describe("category create", () => {
 
         it("should return status 401 if token does not exist", async () => {
             await supertest(createServer())
-                .post("/api/category")
+                .post("/api/v1/category")
                 .send(categoryData)
                 .expect(401);
         });
