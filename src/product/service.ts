@@ -17,9 +17,16 @@ class ProductService {
     }
 
     async updateProduct(id: string, updates: Partial<Product>) {
-        return this.productModel.findByIdAndUpdate(id, updates, {
-            new: true,
-        });
+        const product = await this.productModel.findById(id);
+        if (!product) {
+            throw new Error(`Product with id ${id} not found`);
+        }
+
+        return await this.productModel.findOneAndUpdate(
+            { _id: id },
+            { $set: updates },
+            { new: true },
+        );
     }
 
     async deleteProduct(id: string) {

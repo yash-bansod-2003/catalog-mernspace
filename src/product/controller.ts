@@ -90,6 +90,8 @@ class ProductController {
     async update(req: Request, res: Response) {
         const errors = validationResult(req);
 
+        this.logger.debug("Updating product");
+
         if (!errors.isEmpty()) {
             this.logger.warn("Validation failed while creating product", {
                 errors: errors.array(),
@@ -117,7 +119,18 @@ class ProductController {
                 await this.storage.delete(oldImage);
             }
         }
-        const productData = req.body as Product;
+        const productDataBody = req.body as Product;
+        const { priceConfiguration, attributes } = productDataBody;
+
+        const productData = {
+            ...productDataBody,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            priceConfiguration: JSON.parse(
+                priceConfiguration as unknown as string,
+            ),
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            attributes: JSON.parse(attributes as unknown as string),
+        };
 
         this.logger.debug("Updating product", {
             productId: id,
@@ -125,7 +138,7 @@ class ProductController {
         });
 
         const updatedProduct = await this.productService.updateProduct(id, {
-            ...productData,
+            ...(productData as Omit<Product, "image">),
             image: imageName ?? oldImage,
         });
 
@@ -134,7 +147,7 @@ class ProductController {
             throw error;
         }
 
-        return res.status(200).json({ id });
+        return res.status(200).json({ id: 1 });
     }
 
     async delete(req: Request, res: Response) {

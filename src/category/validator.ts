@@ -21,6 +21,15 @@ const categoryValidator = [
             }
             return value;
         }),
+    body("priceConfiguration.*.availableOptions")
+        .exists()
+        .withMessage(
+            "availableOptions in price configuration is required field",
+        )
+        .isArray()
+        .withMessage(
+            "availableOptions in price configuration must be an array",
+        ),
     body("attributes").exists().withMessage("attributes is required field"),
 ];
 
